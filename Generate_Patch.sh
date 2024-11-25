@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# 定义sdk目录
+# 定义Master-AV1-Patches目录
 s_repo_root_path="/mnt/nfsroot/jianqun.wang/s-fransat-20230415-gtvs"
-s_gretzky_root_path="/mnt/nfsroot/jianqun.wang/google_gretzky_zte"
-
-# 定义patch目录
 patch_path="/mnt/nfsroot/jianqun.wang/zte-project-patch/S/ZTE-Soundbar-Patches"
+
+# 定义Gretzky-Patches目录
+s_gretzky_root_path="/mnt/nfsroot/jianqun.wang/google_gretzky_zte"
 s_gretzky_patch_path="/mnt/nfsroot/jianqun.wang/zte-project-patch/S/ZTE-Gretzky-Patches"
 
 git_root_path=$(git rev-parse --show-toplevel)
