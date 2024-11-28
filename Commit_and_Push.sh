@@ -1,7 +1,16 @@
 #!/bin/bash
 
 # 定义补丁目录
-patch_dir="/mnt/nfsroot/jianqun.wang/zte-project-patch"
+# Enter the corresponding working directory based on the host name and user name
+HOSTNAME=`hostname`
+USERNAME=`whoami`
+if [ "$HOSTNAME" == "droid16-sz" ] && [ "$USERNAME" == "jianqun.wang" ]; then
+    patch_dir="/mnt/fileroot2/jianqun.wang/zte-project-patch"
+elif [ "$HOSTNAME" == "droid13-sz" ] && [ "$USERNAME" == "jianqun.wang" ]; then
+    patch_dir="/mnt/nfsroot/jianqun.wang/zte-project-patch"
+else
+    echo "no push work dir of jianqun.wang"
+fi
 
 # 进入补丁目录
 cd "$patch_dir"
