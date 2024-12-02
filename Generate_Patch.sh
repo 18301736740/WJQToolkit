@@ -12,6 +12,9 @@ s_gretzky_patch_path="/mnt/nfsroot/jianqun.wang/zte-project-patch/S/ZTE-Gretzky-
 u_ab2_root_path="/mnt/fileroot2/jianqun.wang/U_Android14/X4_Y4_Android14_ab2"
 u_ab2_patch_path="/mnt/fileroot2/jianqun.wang/zte-project-patch/U/X4_Y4_Android14_ab2"
 
+# 定义Y5_X5_Android14_ab1目录
+u_ab1_root_path="/mnt/fileroot2/jianqun.wang/U_Android14/Y5_X5_Android14_ab1"
+u_ab1_patch_path="/mnt/fileroot2/jianqun.wang/zte-project-patch/U/Y5_X5_Android14_ab1"
 
 git_root_path=$(git rev-parse --show-toplevel)
 
@@ -54,6 +57,8 @@ elif [[ $git_root_path == $s_gretzky_root_path* ]]; then
     generate_patch "$s_gretzky_root_path" "$s_gretzky_patch_path" "$issue_path"
 elif [[ $git_root_path == $u_ab2_root_path* ]]; then
     generate_patch "$u_ab2_root_path" "$u_ab2_patch_path" "$issue_path"
+elif [[ $git_root_path == $u_ab1_root_path* ]]; then
+    generate_patch "$u_ab1_root_path" "$u_ab1_patch_path" "$issue_path"
 else
     echo "当前 Git 仓库不位于指定的 repo 根目录下。"
 fi
