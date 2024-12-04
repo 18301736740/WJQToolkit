@@ -18,7 +18,11 @@ u_ab1_patch_path="/mnt/fileroot2/jianqun.wang/zte-project-patch/U/Y5_X5_Android1
 
 git_root_path=$(git rev-parse --show-toplevel)
 
+#脚本传递的参数
+param_count=$#
 issue_path="$1"
+commit_range="$2"
+hash_value="$3"
 
 # 根据账号定义对应的zte-project-patch 目录
 HOSTNAME=`hostname`
@@ -40,10 +44,19 @@ generate_patch() {
     local output_dir="$patch_dir/$issue_path/$relative_path"
 
     mkdir -p "$output_dir"
-    git format-patch -1 HEAD -o "$output_dir"
+    if [ "$param_count" -eq 3 ]; then
+        git format-patch "$commit_range" "$hash_value" -o "$output_dir"
+    else
+        git format-patch -1 HEAD -o "$output_dir"
+    fi
     echo "Patch for $root_path has been generated in $output_dir"
 }
 
+# 检查参数数量
+if [ "$param_count" -eq 0 ]; then
+    echo "No arguments provided. Exiting."
+    exit 1
+fi
 
 # 更新响应的zte-project-patch 目录
 cd $zte_project_patch
