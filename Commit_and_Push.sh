@@ -12,6 +12,12 @@ else
     echo "no push work dir of jianqun.wang"
 fi
 
+# 检查参数数量
+if [ $# -eq 0 ]; then
+    echo "No arguments provided. Exiting."
+    exit 1
+fi
+
 # 进入补丁目录
 cd "$patch_dir"
 
