@@ -2,7 +2,8 @@
 
 # 定义Master-AV1-Patches目录
 s_repo_root_path="/mnt/nfsroot/jianqun.wang/s-fransat-20230415-gtvs"
-patch_path="/mnt/nfsroot/jianqun.wang/zte-project-patch/S/ZTE-Soundbar-Patches"
+patch_path="/mnt/nfsroot/jianqun.wang/zte-project-patch/S/ZTE-Master-AV1-Patches"
+#patch_path="/mnt/nfsroot/jianqun.wang/zte-project-patch/S/ZTE-Soundbar-Patches"
 
 # 定义Gretzky-Patches目录
 s_gretzky_root_path="/mnt/nfsroot/jianqun.wang/google_gretzky_zte"
