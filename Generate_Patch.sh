@@ -45,6 +45,13 @@ generate_patch() {
     local output_dir="$patch_dir/$issue_path/$relative_path"
 
     mkdir -p "$output_dir"
+    # 检查 patch-list.txt 中是否已经有 $issue_path 内容
+    if ! grep -q "$issue_path" "$patch_dir/patch-list.txt"; then
+        echo "$issue_path" >> "$patch_dir/patch-list.txt"
+    else
+        echo "Issue path $issue_path already exists in $patch_dir/patch-list.txt"
+    fi
+
     if [ "$param_count" -eq 3 ]; then
         git format-patch "$commit_range" "$hash_value" -o "$output_dir"
     else

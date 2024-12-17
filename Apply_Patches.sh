@@ -132,10 +132,10 @@ function apply_patchs_list()
 	done
 }
 
-if [ -z $1 ]; then
-	usage
-	exit
-fi
+#if [ -z $1 ]; then
+#	usage
+#	exit
+#fi
 
 apply_patchs_list $patch_path
 
