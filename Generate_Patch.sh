@@ -3,7 +3,6 @@
 # 定义Master-AV1-Patches目录
 s_repo_root_path="/mnt/nfsroot/jianqun.wang/s-fransat-20230415-gtvs"
 patch_path="/mnt/nfsroot/jianqun.wang/zte-project-patch/S/ZTE-Master-AV1-Patches"
-#patch_path="/mnt/nfsroot/jianqun.wang/zte-project-patch/S/ZTE-Soundbar-Patches"
 
 # 定义Gretzky-Patches目录
 s_gretzky_root_path="/mnt/nfsroot/jianqun.wang/google_gretzky_zte"
@@ -18,12 +17,6 @@ u_ab1_root_path="/mnt/fileroot2/jianqun.wang/U_Android14/Y5_X5_Android14_ab1"
 u_ab1_patch_path="/mnt/fileroot2/jianqun.wang/zte-project-patch/U/Y5_X5_Android14_ab1"
 
 git_root_path=$(git rev-parse --show-toplevel)
-
-#脚本传递的参数
-param_count=$#
-issue_path="$1"
-commit_range="$2"
-hash_value="$3"
 
 # 根据账号定义对应的zte-project-patch 目录
 HOSTNAME=`hostname`
@@ -60,9 +53,33 @@ generate_patch() {
     echo "Patch for $root_path has been generated in $output_dir"
 }
 
+# 处理命令行选项
+while getopts "p:" opt; do
+    case $opt in
+        p)
+            if [ "$OPTARG" == "soundbar" ]; then
+                patch_path="/mnt/nfsroot/jianqun.wang/zte-project-patch/S/ZTE-Soundbar-Patches"
+            else
+                patch_path="/mnt/nfsroot/jianqun.wang/zte-project-patch/S/ZTE-Master-AV1-Patches"
+            fi
+            ;;
+        *)
+            echo "patch_patch = $patch_path"
+            ;;
+    esac
+done
+
+# 脚本传递的参数更新
+shift $((OPTIND -1))
+
+param_count=$#
+issue_path="$1"
+commit_range="$2"
+hash_value="$3"
+
 # 检查参数数量
 if [ "$param_count" -eq 0 ]; then
-    echo "No arguments provided. Exiting."
+    echo "No arguments provided  Exiting."
     exit 1
 fi
 
