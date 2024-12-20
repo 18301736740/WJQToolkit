@@ -16,7 +16,24 @@
 
 #Y5_X5_Android14_ab1 dir
 sdk_root="/mnt/fileroot2/jianqun.wang/U_Android14/Y5_X5_Android14_ab1"
-patch_path="../../zte-project-patch/U/Y5_X5_Android14_ab1/patch-list.txt"
+
+
+# 定义默认的 patch_path
+patch_path="/mnt/fileroot2/jianqun.wang/zte-project-patch/U/Y5_X5_Android14_ab1/patch-list.txt"
+
+# 检查是否有参数传递给脚本
+if [ $# -eq 0 ]; then
+	#reset Y5_X5_Android14_ab1_base
+	cd $sdk_root
+	repo forall -c "git reset --hard Y5_X5_Android14_ab1_base"
+	cd -
+    echo "No arguments provided, using default patch path."
+else
+    # 如果有参数，则使用第一个参数作为 patch_path
+    patch_path=$1
+	sdk_root=$2
+    echo "Patch path set to: $patch_path"
+fi
 
 function usage()
 {
@@ -117,7 +134,7 @@ function apply_patchs_list()
 	fi
 
 	local patch_list_file=$1
-	local patch_root=$sdk_root/`dirname $1`
+	local patch_root=`dirname $1`
 	local patch_package
 	
 	for patch_package in `cat $patch_list_file`
