@@ -23,16 +23,37 @@ patch_path="/mnt/fileroot2/jianqun.wang/zte-project-patch/U/Y5_X5_Android14_ab1/
 
 # 检查是否有参数传递给脚本
 if [ $# -eq 0 ]; then
-	#reset Y5_X5_Android14_ab1_base
-	cd $sdk_root
-	repo forall -c "git reset --hard Y5_X5_Android14_ab1_base"
-	cd -
-    echo "No arguments provided, using default patch path."
-else
-    # 如果有参数，则使用第一个参数作为 patch_path
-    patch_path=$1
-	sdk_root=$2
+    # 如果没有参数，则报错并退出脚本
+    echo "Error: No arguments provided. Please provide a date argument (e.g., 20241018)."
+    exit 1
+elif [ $# -eq 1 ]; then
+    # 如果有一个参数，则根据参数设置patch_path和执行相应的repo forall命令
+    date_arg=$1
+    patch_path="/mnt/fileroot2/jianqun.wang/zte-project-patch/U/Y5_X5_Android14_ab1/patch-list-${date_arg}.txt"
     echo "Patch path set to: $patch_path"
+    cd $sdk_root
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to change directory to $sdk_root. Please check the path."
+        exit 1
+    fi
+    # 根据日期参数选择不同的reset命令
+    if [ "$date_arg" == "20241018" ]; then
+        repo forall -c "git reset --hard Y5_X5_Android14_ab1_base"
+    elif [ "$date_arg" == "20250110" ]; then
+        repo forall -c "git reset --hard Y5_X5_Android14_ab1_20250110"
+    else
+        echo "Error: Unsupported date argument. Please use a valid date (e.g., 20241018 or 20250110)."
+        exit 1
+    fi
+    cd -
+elif [ $# -eq 2 ]; then
+    # 如果是两个参数则为apply patch 功能
+    patch_path=$1
+    sdk_root=$2
+else
+	# 如果参数数量不正确，则报错并退出脚本
+    echo "Error: Invalid number of arguments. Usage: $0 <date>"
+    exit 1
 fi
 
 function usage()
