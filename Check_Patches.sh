@@ -18,15 +18,32 @@ fi
 # 获取所有.patch文件的Change-Id
 echo "Collecting Change-Ids from patch files..."
 declare -A patch_change_ids
+declare -A patch_file_counts
 change_id_count=0  # 初始化计数器
+patch_count=0 # 初始化计数器
 
 while IFS= read -r patch_file; do
-    #change_id=$(grep -m 1 'Change-Id:' "$patch_file" | awk '{print $2}')
-    change_id=$(grep 'Change-Id:' "$patch_file" | awk '{print $2}')
-    if [[ -n "$change_id" ]]; then
-        patch_change_ids["$change_id"]=1
-        ((change_id_count++))  # 增加计数器
-        echo "Found Change-Id: $change_id in $patch_file"
+    # 提取文件中的所有 Change-Id
+    change_ids=$(grep 'Change-Id:' "$patch_file" | awk '{print $2}')
+    
+    # 检查是否提取到 Change-Id
+    if [[ -n "$change_ids" ]]; then
+        ((patch_count++))  # 增加计数器
+        count=0
+        # 遍历所有提取到的 Change-Id
+        for change_id in $change_ids; do
+            # 只保留以 "I" 开头的 Change-Id
+            if [[ "$change_id" =~ ^I[0-9a-f]{40}$ ]]; then
+                patch_change_ids["$change_id"]=1
+                ((change_id_count++))  # 增加计数器
+                ((count++))  # 增加当前文件的 Change-Id 计数器
+                echo "Found Change-Id: $change_id in $patch_file"
+            fi
+        done
+        # 如果当前文件的 Change-Id 数量大于或等于2，则记录文件名
+        if [[ $count -ge 2 ]]; then
+            patch_file_counts["$patch_file"]=1
+        fi
     fi
 done < <(find "$PATCH_DIR" -type f -name "*.patch")
 
@@ -36,7 +53,14 @@ for change_id in "${!patch_change_ids[@]}"; do
     echo "$change_id"
 done
 
+#打印包含2个或更多 Change-Id 的文件
+echo "#######patch_files_with_multiple_change_ids######"
+for patch_file in "${!patch_file_counts[@]}"; do
+    echo "$patch_file"
+done
+
 # 打印总数
+echo "Total number of unique Patch: $patch_count"
 echo "Total number of unique Change-Ids: $change_id_count"
 
 # 检查Change-Id是否已经合入
