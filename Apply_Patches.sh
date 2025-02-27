@@ -24,8 +24,13 @@ patch_path="/mnt/fileroot2/jianqun.wang/zte-project-patch/U/Y5_X5_Android14_ab1/
 # 检查是否有参数传递给脚本
 if [ $# -eq 0 ]; then
     # 如果没有参数，则报错并退出脚本
-    echo "Error: No arguments provided. Please provide a date argument (e.g., 20241018)."
-    exit 1
+    cd $sdk_root
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to change directory to $sdk_root. Please check the path."
+        exit 1
+    fi
+    repo forall -c "git reset --hard Y5_X5_Android14_ab1_20250121"
+    echo "Patch path set to: $patch_path"
 elif [ $# -eq 1 ]; then
     # 如果有一个参数，则根据参数设置patch_path和执行相应的repo forall命令
     date_arg=$1
