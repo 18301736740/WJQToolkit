@@ -1,10 +1,13 @@
 #!/bin/bash
 
+# 加载配置文件
+source ~/config.sh
+
 # Redmine 服务器地址
 REDMINE_URL="http://61.144.235.50:10320"
 
 # API 密钥
-API_KEY="44ed6e5b6afdaaf9d537c51cb6741bd6db45e9bf"
+API_KEY=$WJQ_REDMINE_API_KEY
 
 # 目录名称
 DIR_NAME=$1
