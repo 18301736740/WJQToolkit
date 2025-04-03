@@ -15,12 +15,17 @@ DIR_NAME=$1
 # Issue ID
 ISSUE_ID=$(echo "$DIR_NAME" | grep -oE '[0-9]{4}$')
 
+# 调用 gettop 函数并存储其输出
+TOP_DIR=$(git rev-parse --show-toplevel)
+PWD=$(pwd)
+RELATIVE_PATH=$(echo "$PWD" | sed "s|$TOP_DIR/||")
+
 # 评论内容
 COMMENT="Patches 获取
 http://61.144.235.50:10320/boards/1/topics/630
 
 目录:
-$(echo "$(pwd)/$DIR_NAME" | sed 's|/mnt/fileroot2/jianqun.wang/zte-project-patch/||')
+$(echo "$RELATIVE_PATH/$DIR_NAME")
 
 $(tree $DIR_NAME)"
 
