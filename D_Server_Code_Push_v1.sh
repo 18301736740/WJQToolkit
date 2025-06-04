@@ -6,6 +6,11 @@ sdk_path=$2
 # 定义xml文件路径
 INPUT_FILE=$3
 
+#定义google xml 路径
+Google_SOURCE_XML=$4
+Google_TARGET_XML=$5
+TARGET_DIR=$6
+
 
 # 生成日期目录
 date_dir=$(date "+%Y-%m-%d")
@@ -23,6 +28,37 @@ mkdir -p "$scan_out_path"
 
 # 定义排除的目录列表
 unshallow_dirs=("device/zte/YEV-kernel" "device/zte/YMA-kernel" "device/zte/HUI-kernel")
+
+# 定义函数：比较文件并执行 Git 操作
+update_file() {
+    local source_file="$1"
+    local target_file="$2"
+    local target_dir="$3"
+
+    echo "-------------------Sync Google Xml Start------------------------"
+    diff_output=$(diff "$source_file" "$target_file")
+
+    if [ -z "$diff_output" ]; then
+        echo "No differences found. Exiting."
+	return 0
+    else
+        echo "Differences found. Proceeding with file replacement."
+    fi
+    # 覆盖目标文件
+    cp "$source_file" "$target_file"
+
+    # 切换到目标目录
+    cd "$target_dir" || { echo "Failed to change directory to $target_dir. Exiting."; return 1; }
+
+    # 执行 Git 操作
+    git add "$target_file"
+
+    git commit -m "Update $date_dir google xml"
+
+    git push origin default:u-refplus-wave2-20250326
+
+    echo "-------------------Sync Google Xml END------------------------"
+}
 
 git_fetch() {
     for dir in "${unshallow_dirs[@]}"; do
@@ -239,6 +275,7 @@ main() {
     git_push
     push_verify
     result_print
+    update_file "$Google_SOURCE_XML" "$Google_TARGET_XML" "$TARGET_DIR"
 }
 
 # 执行主程序
