@@ -158,6 +158,10 @@ grep -E 'revision="[^"]+"[^>]*name="[^"]+"' "$INPUT_FILE" | \
     grep -v 'path=' | \
     grep -Eo 'revision="[^"]+"[^>]*name="[^"]+"' | \
     sed -E 's/revision="([^"]+)"[^>]*name="([^"]+)"/\1 \2/' >> "$OUTPUT_FILE"
+
+    #删除不需要的目录
+    sed -i '/60f100f24738f68c051ea0a218ecd5e1a0c5185a/d' $OUTPUT_FILE
+    sed -i '/6989bafc0f354a5ea7dd02e987b9723e204cf8cf/d' $OUTPUT_FILE
 }
 
 # 读取临时文件中的信息,执行git push 操作
